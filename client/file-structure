@@ -1,0 +1,12 @@
+src/
+├── components/
+│   ├── Navbar.tsx
+│   └── Footer.tsx
+├── pages/
+│   ├── HomePage.tsx
+│   ├── ServicesPage.tsx
+│   ├── LoginPage.tsx
+│   ├── RegisterPage.tsx
+│   └── DashboardPage.tsx
+├── App.tsx
+└── Main.tsx

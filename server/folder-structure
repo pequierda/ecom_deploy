@@ -1,0 +1,49 @@
+src/
+├── controllers/
+│   ├── AuthController.js
+│   ├── PackageController.js
+│   ├── BookingController.js
+│   ├── PaymentController.js
+│   ├── CategoryController.js
+│   ├── ReviewController.js
+│   └── LogController.js
+├── models/
+│   ├── User.js
+│   ├── Package.js
+│   ├── Category.js
+│   ├── Booking.js
+│   ├── Payment.js
+│   ├── Review.js
+│   └── Log.js
+├── services/
+│   ├── AuthService.js
+│   ├── PackageService.js
+│   ├── BookingService.js
+│   ├── PaymentService.js
+│   ├── CategoryService.js
+│   ├── ReviewService.js
+│   └── LogService.js
+├── routes/
+│   ├── authRoutes.js
+│   ├── packageRoutes.js
+│   ├── bookingRoutes.js
+│   ├── paymentRoutes.js
+│   ├── categoryRoutes.js
+│   ├── reviewRoutes.js
+│   └── logRoutes.js
+├── middleware/
+│   ├── authMiddleware.js
+│   ├── uploadMiddleware.js
+│   ├── validationMiddleware.js
+│   └── loggingMiddleware.js
+├── utils/
+│   ├── errors.js
+│   ├── errorHandler.js
+│   ├── validators.js
+│   ├── fileHelper.js
+│   └── responseHelper.js
+├── config/
+│   ├── database.js
+│   ├── jwt.js
+│   └── upload.js
+└── app.js
