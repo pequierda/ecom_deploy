@@ -2,12 +2,23 @@
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import { getUploadsPath } from '../config/paths.js';
 
-// Ensure upload directory exists
-const uploadDir = 'uploads/packages';
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+const uploadDir = getUploadsPath('packages');
+
+const ensureDirectory = (dir) => {
+  try {
+    fs.mkdirSync(dir, { recursive: true });
+  } catch (error) {
+    if (error.code === 'EEXIST') {
+      return;
+    }
+    console.error(`Unable to prepare upload directory "${dir}":`, error);
+    throw new Error('Upload storage is not writable. Set UPLOADS_ROOT to a writable path.');
+  }
+};
+
+ensureDirectory(uploadDir);
 
 // Configure multer storage
 const storage = multer.diskStorage({

@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import fs from "fs";
 
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -16,6 +17,7 @@ import reportsRoutes from "./routes/reportsRoutes.js";
 import statsRoutes from "./routes/statsRoutes.js"; 
 // ADD THIS: Import the new planner management routes
 import plannerManagementRoutes from "./routes/plannerManagementRoutes.js";
+import { UPLOADS_ROOT } from "./config/paths.js";
 
 dotenv.config();
 const app = express();
@@ -37,7 +39,16 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/uploads', express.static('uploads'));
+const shouldServeUploads = process.env.SERVE_UPLOADS_STATIC !== "false";
+
+if (shouldServeUploads) {
+  try {
+    fs.mkdirSync(UPLOADS_ROOT, { recursive: true });
+    app.use('/uploads', express.static(UPLOADS_ROOT));
+  } catch (error) {
+    console.warn(`Uploads directory unavailable (${UPLOADS_ROOT}): ${error.message}`);
+  }
+}
 
 // Routes
 app.use("/api/auth", authRoutes);
