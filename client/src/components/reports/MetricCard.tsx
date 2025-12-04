@@ -18,7 +18,7 @@ interface MetricCardProps {
 const MetricCard: React.FC<MetricCardProps> = ({
   title,
   value,
-  change,
+  change = null,
   icon: Icon,
   iconColor,
   prefix = '',

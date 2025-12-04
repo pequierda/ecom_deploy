@@ -1,5 +1,5 @@
 // services/reportsService.ts
-import type { Period, ChartType, ReportsData } from '../types/reports';
+import type { Period, ChartType, ReportsData, ReportType, ReportExportFormat } from '../types/reports';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -26,7 +26,12 @@ class ReportsService {
     }
   }
 
-  async exportReport(period: Period, chartType: ChartType, reportType: string): Promise<Blob> {
+  async exportReport(
+    period: Period,
+    chartType: ChartType,
+    reportType: ReportType,
+    format: ReportExportFormat = 'pdf'
+  ): Promise<Blob> {
     try {
       const response = await fetch(`${API_BASE_URL}/reports/export`, {
         method: 'POST',
@@ -38,7 +43,7 @@ class ReportsService {
           period,
           chartType,
           reportType,
-          format: 'pdf' // or 'xlsx', 'csv' depending on requirements
+          format
         }),
       });
 

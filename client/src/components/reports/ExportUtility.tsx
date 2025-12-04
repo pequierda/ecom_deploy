@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { Download, FileText, BarChart3, Users, DollarSign, Loader2 } from 'lucide-react';
 import { useReportExport } from '../../hooks/useReports';
+import type { Period, ReportType, ReportExportFormat } from '../../types/reports';
 
 interface ExportUtilityProps {
-  selectedPeriod: string;
+  selectedPeriod: Period;
   className?: string;
 }
 
@@ -13,26 +14,27 @@ const ExportUtility: React.FC<ExportUtilityProps> = ({
   className = '' 
 }) => {
   const { exportReport, loading, error } = useReportExport();
-  const [selectedFormat, setSelectedFormat] = useState('json');
-  const [selectedType, setSelectedType] = useState('comprehensive');
+  const [selectedFormat, setSelectedFormat] = useState<ReportExportFormat>('json');
+  const [selectedType, setSelectedType] = useState<ReportType>('comprehensive');
 
   const exportOptions = [
-    { value: 'comprehensive', label: 'Complete Report', icon: FileText },
-    { value: 'revenue', label: 'Revenue Analytics', icon: DollarSign },
-    { value: 'bookings', label: 'Booking Analytics', icon: BarChart3 },
-    { value: 'satisfaction', label: 'Client Satisfaction', icon: Users }
-  ];
+    { value: 'comprehensive' as ReportType, label: 'Complete Report', icon: FileText },
+    { value: 'revenue' as ReportType, label: 'Revenue Analytics', icon: DollarSign },
+    { value: 'bookings' as ReportType, label: 'Booking Analytics', icon: BarChart3 },
+    { value: 'satisfaction' as ReportType, label: 'Client Satisfaction', icon: Users }
+  ] as const;
 
-  const formatOptions = [
+  const formatOptions: Array<{ value: ReportExportFormat; label: string; description: string }> = [
     { value: 'json', label: 'JSON Data', description: 'Machine-readable format' },
-    { value: 'csv', label: 'CSV Export', description: 'Spreadsheet compatible' }
+    { value: 'csv', label: 'CSV Export', description: 'Spreadsheet compatible' },
+    { value: 'pdf', label: 'PDF Summary', description: 'Presentation ready' },
   ];
 
   const handleExport = async () => {
-    await exportReport(selectedType, selectedPeriod);
+    await exportReport(selectedType, selectedPeriod, selectedFormat);
   };
 
-  const getPeriodLabel = (period: string) => {
+  const getPeriodLabel = (period: Period) => {
     switch (period) {
       case '3months': return 'Last 3 Months';
       case '6months': return 'Last 6 Months';
@@ -91,7 +93,7 @@ const ExportUtility: React.FC<ExportUtilityProps> = ({
                   name="format"
                   value={format.value}
                   checked={selectedFormat === format.value}
-                  onChange={(e) => setSelectedFormat(e.target.value)}
+                  onChange={(e) => setSelectedFormat(e.target.value as ReportExportFormat)}
                   className="w-3 h-3 text-pink-600 focus:ring-pink-500"
                 />
                 <div className="ml-2">

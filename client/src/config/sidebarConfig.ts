@@ -25,6 +25,7 @@ export interface SidebarItem {
   disabled?: boolean;
   requiresApproval?: boolean;
   badge?: string;
+  active?: boolean;
 }
 
 // Get planner status from user object

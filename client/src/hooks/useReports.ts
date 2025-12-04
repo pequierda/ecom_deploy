@@ -1,7 +1,7 @@
 // hooks/useReports.ts
 import { useEffect, useMemo } from 'react';
 import { useReportsStore } from '../stores/reportsStore';
-import type { Period, ChartType, ReportType, BookingStatus } from '../types/reports';
+import type { Period, ChartType, ReportType, BookingStatus, ReportExportFormat } from '../types/reports';
 
 export const useReports = () => {
   const {
@@ -136,5 +136,23 @@ export const useReports = () => {
     // Actions
     fetchReportsData,
     clearError
+  };
+};
+
+export const useReportExport = () => {
+  const { exportReport, loading, error } = useReportsStore();
+
+  const handleExport = async (
+    reportType: ReportType,
+    period: Period,
+    format: ReportExportFormat = 'pdf'
+  ) => {
+    await exportReport({ reportType, period, format });
+  };
+
+  return {
+    exportReport: handleExport,
+    loading,
+    error,
   };
 };

@@ -6,9 +6,10 @@ import { useAuthStore } from '../../stores/authStore';
 
 const ClientProfile = () => {
   const { user } = useAuthStore();
+  const displayName = [user?.first_name, user?.last_name].filter(Boolean).join(' ') || user?.email || '';
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
-    name: user?.name || '',
+    name: displayName,
     email: user?.email || '',
     phone: '+63 912 345 6789',
     address: 'Makati City, Metro Manila',
@@ -59,7 +60,7 @@ const ClientProfile = () => {
               <div className="flex items-center space-x-4">
                 <div className="relative">
                   <div className="w-20 h-20 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-semibold">
-                    {user?.name?.charAt(0).toUpperCase()}
+                    {displayName.charAt(0).toUpperCase()}
                   </div>
                   <button className="absolute bottom-0 right-0 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center text-gray-600 hover:text-gray-800">
                     <Camera className="w-3 h-3" />

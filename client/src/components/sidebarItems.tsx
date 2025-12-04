@@ -30,7 +30,8 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     navigate('/');
   };
 
-  const sidebarItems = getSidebarItems(user.role, handleLogout);
+  const sidebarItems = getSidebarItems(user.role, handleLogout, user);
+  const displayName = [user.first_name, user.last_name].filter(Boolean).join(' ') || user.email || 'User';
 
   const getRoleColor = (role: string) => {
     switch (role) {
@@ -81,7 +82,7 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                 <h2 className="text-sm font-semibold text-gray-900 capitalize">
                   {user.role} Panel
                 </h2>
-                <p className="text-xs text-gray-500 truncate">{user.name}</p>
+                <p className="text-xs text-gray-500 truncate">{displayName}</p>
               </div>
             </div>
           )}
@@ -125,12 +126,15 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
           }
 
           // Handle regular navigation items
-          const isActive = item.active || currentPath.includes(item.name.toLowerCase().replace(' ', '-'));
+          const normalizedPath = item.path || '';
+          const isActive = typeof item.active === 'boolean'
+            ? item.active
+            : (normalizedPath ? currentPath.startsWith(normalizedPath) : false);
           
           return (
             <Link
-              key={index}
-              to={`/${user.role}/${item.name.toLowerCase().replace(' ', '-')}`}
+              key={item.path || `${item.name}-${index}`}
+              to={normalizedPath || '/'}
               className={`
                 flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
                 ${isActive 

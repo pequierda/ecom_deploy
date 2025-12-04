@@ -2,7 +2,15 @@
 
 export type Period = '3months' | '6months' | '1year' | 'all';
 export type ChartType = '24hours' | 'weekly' | 'monthly';
-export type ReportType = 'overview' | 'revenue' | 'clients';
+export type ReportType = 
+  | 'overview'
+  | 'revenue'
+  | 'clients'
+  | 'bookings'
+  | 'satisfaction'
+  | 'comprehensive';
+  
+export type ReportExportFormat = 'pdf' | 'csv' | 'json';
 export type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
 
 export interface BusinessMetric {
@@ -66,7 +74,12 @@ export interface ReportsState {
 export interface ReportsActions {
   fetchReportsData: (period?: Period, chartType?: ChartType) => Promise<void>;
   updateFilters: (filters: Partial<ReportsFilters>) => void;
-  exportReport: () => Promise<void>;
+  exportReport: (options?: {
+    period?: Period;
+    chartType?: ChartType;
+    reportType?: ReportType;
+    format?: ReportExportFormat;
+  }) => Promise<void>;
   clearError: () => void;
   reset: () => void;
 }

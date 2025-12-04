@@ -830,7 +830,11 @@ const PlannerProfile = () => {
                         <div className="flex items-center space-x-2 mb-1">
                           <h4 className="font-medium text-gray-900">{review.client}</h4>
                           {review.verified && (
-                            <CheckCircle className="w-4 h-4 text-green-500" title="Verified review" />
+                            <CheckCircle
+                              className="w-4 h-4 text-green-500"
+                              aria-label="Verified review"
+                              role="img"
+                            />
                           )}
                         </div>
                         <div className="flex items-center space-x-1">

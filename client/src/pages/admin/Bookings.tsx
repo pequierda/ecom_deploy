@@ -296,7 +296,11 @@ const AdminBookings = () => {
                       <h3 className="text-lg font-semibold text-gray-900">{booking.clientName}</h3>
                       <span className="text-sm text-gray-500">#{booking.bookingNumber}</span>
                       {hasPermitIssues && (
-                        <AlertTriangle className="w-4 h-4 text-red-500" title="Permit issues detected" />
+                        <AlertTriangle
+                          className="w-4 h-4 text-red-500"
+                          aria-label="Permit issues detected"
+                          role="img"
+                        />
                       )}
                     </div>
                     <p className="text-sm text-gray-600">{booking.packageName}</p>

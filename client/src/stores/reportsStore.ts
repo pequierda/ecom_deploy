@@ -6,7 +6,9 @@ import type {
   ReportsActions, 
   Period, 
   ChartType, 
-  ReportsFilters 
+  ReportsFilters,
+  ReportType,
+  ReportExportFormat 
 } from '../types/reports';
 import { reportsService } from '../services/reportsService';
 
@@ -73,16 +75,28 @@ export const useReportsStore = create<ReportsState & ReportsActions>()(
         }
       },
 
-      exportReport: async () => {
+      exportReport: async (options?: {
+        period?: Period;
+        chartType?: ChartType;
+        reportType?: ReportType;
+        format?: ReportExportFormat;
+      }) => {
         const { filters } = get();
+        const exportFilters = {
+          period: options?.period || filters.period,
+          chartType: options?.chartType || filters.chartType,
+          reportType: options?.reportType || filters.reportType,
+          format: options?.format,
+        };
         
         try {
           set({ loading: true, error: null });
           
           const blob = await reportsService.exportReport(
-            filters.period,
-            filters.chartType,
-            filters.reportType
+            exportFilters.period,
+            exportFilters.chartType,
+            exportFilters.reportType,
+            exportFilters.format
           );
 
           // Handle download directly in store
