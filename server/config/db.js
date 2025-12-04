@@ -1,19 +1,24 @@
 import mysql from 'mysql2/promise';
 
-// Create MySQL connection pool with Philippine timezone
+const toNumber = (value, fallback) => {
+    const parsed = Number(value);
+    return Number.isNaN(parsed) ? fallback : parsed;
+};
+
 const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '', 
-    database: 'wedding_mart_db',
-    timezone: '+08:00', // Add this line for Philippine timezone (UTC+8)
+    host: process.env.DB_HOST || 'localhost',
+    port: toNumber(process.env.DB_PORT, 3306),
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'wedding_mart_db',
+    timezone: process.env.DB_TIMEZONE || '+08:00',
     waitForConnections: true,
-    connectionLimit: 10,
+    connectionLimit: toNumber(process.env.DB_CONNECTION_LIMIT, 10),
     queueLimit: 0,
-    charset: 'utf8mb4', // Also good to include for proper character support
-    connectTimeout: 60000,
-    acquireTimeout: 60000,
-    timeout: 60000
+    charset: process.env.DB_CHARSET || 'utf8mb4',
+    connectTimeout: toNumber(process.env.DB_CONNECT_TIMEOUT, 60000),
+    acquireTimeout: toNumber(process.env.DB_ACQUIRE_TIMEOUT, 60000),
+    timeout: toNumber(process.env.DB_TIMEOUT, 60000)
 });
 
 export default pool;

@@ -20,8 +20,18 @@ import plannerManagementRoutes from "./routes/plannerManagementRoutes.js";
 dotenv.config();
 const app = express();
 
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || "http://localhost:5173")
+  .split(",")
+  .map(origin => origin.trim())
+  .filter(Boolean);
+
 app.use(cors({
-  origin: "http://localhost:5173", 
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS"));
+  },
   credentials: true,
 }));
 app.use(express.json());
@@ -46,4 +56,9 @@ app.use("/api/stats", statsRoutes);
 app.use("/api/admin/planners", plannerManagementRoutes);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+export default app;
